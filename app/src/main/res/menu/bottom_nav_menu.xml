@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_aniversarios"
+        android:icon="@drawable/baseline_calendar_month_24"
+        android:title="@string/title_fragment_aniversarios" />
+    <item
+        android:id="@+id/nav_novoaniversario"
+        android:icon="@drawable/baseline_add_alert_24"
+        android:title="@string/title_fragment_novoaniversariante" />
+    <item
+        android:id="@+id/nav_qrcode"
+        android:icon="@drawable/baseline_qr_code_2_24"
+        android:title="@string/title_fragment_qrcode" />
+</menu>
