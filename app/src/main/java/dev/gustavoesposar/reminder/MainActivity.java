@@ -16,13 +16,11 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Configurar comportamento de clique nos itens da navbar
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment selectedFragment = null;
 
-                // Usar if-else em vez de switch
                 int id = item.getItemId();
 
                 if (id == R.id.nav_aniversarios) {
@@ -33,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
                     selectedFragment = new QrcodeFragment();
                 }
 
-                // Trocar fragmento quando item for selecionado
                 if (selectedFragment != null) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container, selectedFragment).commit();
                 }
@@ -42,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-        // Definir a tela inicial ao iniciar
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.container, new AniversariosFragment()).commit();
         }
