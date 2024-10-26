@@ -110,5 +110,4 @@
             android:textColor="#FFFFFF"
             android:onClick="cadastroActivity" />
     </LinearLayout>
-    <!-- Fim do formulário de login -->
 </androidx.constraintlayout.widget.ConstraintLayout>
