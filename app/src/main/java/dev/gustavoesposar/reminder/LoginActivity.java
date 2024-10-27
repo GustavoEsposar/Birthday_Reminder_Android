@@ -37,13 +37,7 @@ public class LoginActivity extends AppCompatActivity {
             return insets;
         });
 
-        // API de conexão com servidor
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:3000/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        apiService = retrofit.create(ApiService.class);
+        apiService = ApiClient.getClient().create(ApiService.class);
 
         // binding com elementos do view
         emailEditText = findViewById(R.id.email);
