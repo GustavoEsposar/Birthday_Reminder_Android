@@ -5,20 +5,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Configuração da cadeia vertical para centralizar -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="106dp"
+        android:layout_height="103dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="550dp"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/app_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="158dp"
+        android:layout_height="129dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="120dp"
+        android:layout_marginBottom="524dp"
+        android:fontFamily="@font/pacifico"
+        android:lines="2"
+        android:minLines="2"
+        android:text="Birthday Reminder"
+        android:textColor="#000000"
+        android:textColorLink="#FFFFFF"
+        android:textSize="37sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:lineHeight="100px" />
+
+
     <EditText
         android:id="@+id/name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/edit_text_background"
         android:hint="Nome do aniversariante"
         android:inputType="text"
         android:padding="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/birthdate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/birthdate"
+        app:layout_constraintTop_toBottomOf="@id/imageView"
         app:layout_constraintVertical_chainStyle="packed" />
+
 
     <EditText
         android:id="@+id/birthdate"
@@ -29,6 +68,7 @@
         android:hint="Data de nascimento"
         android:inputType="date"
         android:padding="16dp"
+        android:background="@drawable/edit_text_background"
         app:layout_constraintBottom_toTopOf="@+id/submit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +83,7 @@
         android:fontFamily="@font/pacifico"
         android:padding="10dp"
         android:text="Adicionar"
-        android:textColor="@android:color/white"
+        android:textColor="@color/black"
         android:textSize="25sp"
         app:cornerRadius="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
