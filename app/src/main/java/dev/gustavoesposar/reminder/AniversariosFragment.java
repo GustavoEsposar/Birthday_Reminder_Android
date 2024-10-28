@@ -126,7 +126,7 @@ public class AniversariosFragment extends Fragment {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
-                        Toast.makeText(getContext(), "Aniversariante deletado do servidor", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Aniversariante deletado!", Toast.LENGTH_SHORT).show();
                         aniversariantes.remove(aniversariante);
                         aniversarianteAdapter.notifyDataSetChanged();
                         carregarAniversariantesDoServidor();
