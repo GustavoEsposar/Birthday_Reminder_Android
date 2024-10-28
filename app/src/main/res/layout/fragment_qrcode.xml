@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="263dp"
+        android:layout_height="81dp"
+        android:fontFamily="@font/pacifico"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:lines="2"
+        android:minLines="2"
+        android:text="Meu Código"
+        android:textColor="#000000"
+        android:textColorLink="#FFFFFF"
+        android:textSize="37sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:lineHeight="100px" />
+
+    <ImageView
+        android:id="@+id/qrCode"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="233dp"
+        android:layout_marginEnd="153dp"
+        android:layout_marginBottom="314dp"
+        android:src="@drawable/qr_code"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_name" />
+
+    <ImageButton
+        android:id="@+id/openCamera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/circular_button_background"
+        android:contentDescription="@string/delete"
+        android:padding="0dp"
+        android:src="@drawable/baseline_camera_alt_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
