@@ -18,4 +18,7 @@ public interface ApiService {
 
     @POST("/deleteBirthdateMobile")
     Call<Void> deleteAniversariante(@Header("Authorization") String token, @Body Map<String, String> body);
+
+    @POST("/addBirthdateMobile")
+    Call<Void> addAniversariante(@Header("Authorization") String token, @Body Map<String, String> body);
 }
