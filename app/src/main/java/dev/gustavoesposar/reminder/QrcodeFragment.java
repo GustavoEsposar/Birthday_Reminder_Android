@@ -179,16 +179,6 @@ public class QrcodeFragment extends Fragment {
         }
     }
 
-    public static String getUrl(String name, String birth) {
-        try {
-            String data = URLEncoder.encode("{\"name\":\"" + name + "\",\"birthdate\":\"" + birth + "\"}", "UTF-8");
-            return "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + data;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public static void saveQrCodeImageLocally(Context context) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         String qrCodeUrl = sharedPreferences.getString("QRCODE_URL", null);
@@ -218,5 +208,15 @@ public class QrcodeFragment extends Fragment {
                 e.printStackTrace();
             }
         }).start();
+    }
+
+    public static String getUrl(String name, String birth) {
+        try {
+            String data = URLEncoder.encode("{\"name\":\"" + name + "\",\"birthdate\":\"" + birth + "\"}", "UTF-8");
+            return "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=" + data;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
