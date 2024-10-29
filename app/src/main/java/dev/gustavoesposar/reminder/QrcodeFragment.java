@@ -37,7 +37,18 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
+
 import android.Manifest;
+import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QrcodeFragment extends Fragment {
 
@@ -122,9 +133,50 @@ public class QrcodeFragment extends Fragment {
     }
 
     private void handleQRCodeData(String qrData) {
-        // Extraia os dados e use conforme necessário
-        Log.d("QRCodeData", qrData);
-        // Aqui você pode fazer o POST usando os dados extraídos do QR code
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("JWT_TOKEN", null);
+
+        if (token != null) {
+            JSONObject qrDataJson = null;
+            try {
+                qrDataJson = new JSONObject(qrData);
+                String name = qrDataJson.getString("name");
+                String birthdate = qrDataJson.getString("birthdate");
+
+                String[] dateParts = birthdate.split("/");
+                String day = dateParts[0].length() == 1 ? "0" + dateParts[0] : dateParts[0];
+                String month = dateParts[1].length() == 1 ? "0" + dateParts[1] : dateParts[1];
+                String year = dateParts[2];
+                String formattedDate = year + "-" + month + "-" + day;
+
+                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+
+                Map<String, String> body = new HashMap<>();
+                body.put("name", name);
+                body.put("date", formattedDate);
+
+                Call<Void> call = apiService.addAniversariante("Bearer " + token, body);
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            Toast.makeText(getContext(), name.split(" ")[0] + " foi adicionado!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Erro ao adicionar no servidor", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                        Toast.makeText(getContext(), "Falha na conexão com o servidor", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } catch (JSONException e) {
+                Toast.makeText(getContext(), "Erro ao processar o QR Code", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getContext(), "Token de autenticação ausente", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static String getUrl(String name, String birth) {
