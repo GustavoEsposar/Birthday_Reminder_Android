@@ -28,6 +28,8 @@ import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.barcode.common.Barcode;
 import com.google.mlkit.vision.common.InputImage;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,6 +55,7 @@ import retrofit2.Response;
 public class QrcodeFragment extends Fragment {
 
     private ActivityResultLauncher<String> requestCameraPermissionLauncher;
+    private ImageButton openCameraButton;
 
     @Nullable
     @Override
@@ -60,7 +63,7 @@ public class QrcodeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_qrcode, container, false);
 
         ImageView qrCodeImageView = view.findViewById(R.id.qrCode);
-        ImageButton openCameraButton = view.findViewById(R.id.openCamera);
+        openCameraButton = view.findViewById(R.id.openCamera);
 
         File qrCodeFile = new File(requireContext().getFilesDir(), "qr_code.png");
         if (qrCodeFile.exists()) {
@@ -68,23 +71,21 @@ public class QrcodeFragment extends Fragment {
             qrCodeImageView.setImageBitmap(qrBitmap);
         }
 
-        // Inicializa o launcher para solicitar a permissão de câmera
         requestCameraPermissionLauncher = registerForActivityResult(
                 new ActivityResultContracts.RequestPermission(),
                 isGranted -> {
                     if (isGranted) {
-                        openCamera();
+                        scanCode();
                     } else {
-                        // Permissão negada; mostre uma mensagem informando que a câmera é necessária
+                        Toast.makeText(requireContext(), "Permissão necessária para esta operação", Toast.LENGTH_LONG).show();
                     }
                 }
         );
 
         openCameraButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                openCamera();
+                scanCode();
             } else {
-                // Solicita a permissão
                 requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA);
             }
         });
@@ -92,62 +93,39 @@ public class QrcodeFragment extends Fragment {
         return view;
     }
 
-    private final ActivityResultLauncher<Intent> cameraLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    processImageFromCamera(result.getData());
-                }
-            }
-    );
-
-    private void openCamera() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        cameraLauncher.launch(intent);
+    private void scanCode() {
+        ScanOptions options = new ScanOptions();
+        options.setPrompt("Aproxime o QR Code");
+        options.setBeepEnabled(false);
+        options.setOrientationLocked(true);
+        options.setCaptureActivity(CaptureAct.class);
+        cameraLauncher.launch(options);
     }
 
-    private void processImageFromCamera(Intent data) {
-        Bundle extras = data.getExtras();
-        Bitmap bitmap = (Bitmap) extras.get("data");
-
-        if (bitmap != null) {
-            InputImage image = InputImage.fromBitmap(bitmap, 0);
-
-            BarcodeScannerOptions options = new BarcodeScannerOptions.Builder()
-                    .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
-                    .build();
-
-            BarcodeScanner scanner = BarcodeScanning.getClient(options);
-
-            scanner.process(image)
-                    .addOnSuccessListener(barcodes -> {
-                        for (Barcode barcode : barcodes) {
-                            String qrData = barcode.getRawValue();
-                            if (qrData != null) {
-                                handleQRCodeData(qrData);
-                            }
-                        }
-                    })
-                    .addOnFailureListener(e -> e.printStackTrace());
+    private final ActivityResultLauncher<ScanOptions> cameraLauncher = registerForActivityResult(new ScanContract(), result -> {
+        if (result.getContents() != null) {
+            Log.d("QRCode", "Scanned: " + result.getContents());
+            handleQRCodeData(result.getContents());
         }
-    }
+    });
 
     private void handleQRCodeData(String qrData) {
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("JWT_TOKEN", null);
 
         if (token != null) {
-            JSONObject qrDataJson = null;
             try {
+                JSONObject qrDataJson = null;
                 qrDataJson = new JSONObject(qrData);
+                Log.d("QRCode", "JSON: " + qrDataJson.toString());
                 String name = qrDataJson.getString("name");
                 String birthdate = qrDataJson.getString("birthdate");
 
-                String[] dateParts = birthdate.split("/");
-                String day = dateParts[0].length() == 1 ? "0" + dateParts[0] : dateParts[0];
-                String month = dateParts[1].length() == 1 ? "0" + dateParts[1] : dateParts[1];
-                String year = dateParts[2];
+                String year = birthdate.substring(0, 4);
+                String month = birthdate.substring(5, 7);
+                String day = birthdate.substring(8, 10);
                 String formattedDate = year + "-" + month + "-" + day;
+                Log.d("QRCode", "Formatted Date: " + formattedDate);
 
                 ApiService apiService = ApiClient.getClient().create(ApiService.class);
 

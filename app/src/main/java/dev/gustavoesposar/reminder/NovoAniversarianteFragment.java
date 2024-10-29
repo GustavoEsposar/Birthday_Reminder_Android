@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,6 +86,7 @@ public class NovoAniversarianteFragment extends Fragment {
             String month = dateParts[1].length() == 1 ? "0" + dateParts[1] : dateParts[1];
             String year = dateParts[2];
             String formattedDate = year + "-" + month + "-" + day;
+            Log.d("QRCode", "Formatted Date: " + formattedDate);
 
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
