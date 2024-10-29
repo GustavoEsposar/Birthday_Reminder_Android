@@ -1,14 +1,11 @@
 package dev.gustavoesposar.reminder;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.mlkit.vision.barcode.BarcodeScanner;
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
-import com.google.mlkit.vision.barcode.BarcodeScanning;
-import com.google.mlkit.vision.barcode.common.Barcode;
-import com.google.mlkit.vision.common.InputImage;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -117,38 +109,38 @@ public class QrcodeFragment extends Fragment {
             try {
                 JSONObject qrDataJson = null;
                 qrDataJson = new JSONObject(qrData);
-                Log.d("QRCode", "JSON: " + qrDataJson.toString());
-                String name = qrDataJson.getString("name");
-                String birthdate = qrDataJson.getString("birthdate");
+                if(qrDataJson.has("name") && qrDataJson.has("birthdate")) {
+                    String name = qrDataJson.getString("name");
+                    String birthdate = qrDataJson.getString("birthdate");
 
-                String year = birthdate.substring(0, 4);
-                String month = birthdate.substring(5, 7);
-                String day = birthdate.substring(8, 10);
-                String formattedDate = year + "-" + month + "-" + day;
-                Log.d("QRCode", "Formatted Date: " + formattedDate);
+                    String year = birthdate.substring(0, 4);
+                    String month = birthdate.substring(5, 7);
+                    String day = birthdate.substring(8, 10);
+                    String formattedDate = year + "-" + month + "-" + day;
 
-                ApiService apiService = ApiClient.getClient().create(ApiService.class);
+                    ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
-                Map<String, String> body = new HashMap<>();
-                body.put("name", name);
-                body.put("date", formattedDate);
+                    Map<String, String> body = new HashMap<>();
+                    body.put("name", name);
+                    body.put("date", formattedDate);
 
-                Call<Void> call = apiService.addAniversariante("Bearer " + token, body);
-                call.enqueue(new Callback<Void>() {
-                    @Override
-                    public void onResponse(Call<Void> call, Response<Void> response) {
-                        if (response.isSuccessful()) {
-                            Toast.makeText(getContext(), name.split(" ")[0] + " foi adicionado!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getContext(), "Erro ao adicionar no servidor", Toast.LENGTH_SHORT).show();
+                    Call<Void> call = apiService.addAniversariante("Bearer " + token, body);
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            if (response.isSuccessful()) {
+                                Toast.makeText(getContext(), name.split(" ")[0] + " foi adicionado!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(getContext(), "Erro ao adicionar no servidor", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Void> call, Throwable t) {
-                        Toast.makeText(getContext(), "Falha na conexão com o servidor", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(getContext(), "Falha na conexão com o servidor", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
             } catch (JSONException e) {
                 Toast.makeText(getContext(), "Erro ao processar o QR Code", Toast.LENGTH_SHORT).show();
             }
