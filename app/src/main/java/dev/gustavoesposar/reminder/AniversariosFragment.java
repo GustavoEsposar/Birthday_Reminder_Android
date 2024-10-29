@@ -5,7 +5,6 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,7 +84,6 @@ public class AniversariosFragment extends Fragment {
                 @Override
                 public void onResponse(Call<List<Aniversariante>> call, Response<List<Aniversariante>> response) {
                     if (response.isSuccessful() && response.body() != null) {
-                        Log.d("AniversariosFragment", response.body() + "");
                         // Atualizar o banco de dados local com os novos dados
                         new Thread(() -> {
                             aniversarianteDao.deleteAll();
