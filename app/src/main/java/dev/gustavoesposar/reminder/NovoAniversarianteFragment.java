@@ -1,6 +1,5 @@
 package dev.gustavoesposar.reminder;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,10 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.gustavoesposar.reminder.utils.CadastroValidator;
+import dev.gustavoesposar.reminder.utils.DateTextWatcher;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -49,24 +49,7 @@ public class NovoAniversarianteFragment extends Fragment {
     }
 
     private void setupBirthdateInput() {
-        birthdateInput.setOnClickListener(v -> openDatePicker());
-    }
-
-    private void openDatePicker() {
-        final Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                getActivity(),
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
-                    birthdateInput.setText(selectedDate);
-                },
-                year, month, day
-        );
-        datePickerDialog.show();
+        birthdateInput.addTextChangedListener(new DateTextWatcher(birthdateInput));
     }
 
     private void setupSubmitButton() {
@@ -77,15 +60,24 @@ public class NovoAniversarianteFragment extends Fragment {
         SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
         String token = sharedPreferences.getString("JWT_TOKEN", null);
 
-        if (token != null) {
-            String name = nameInput.getText().toString();
-            String birthdate = birthdateInput.getText().toString();
+        if (token == null) {
+            Toast.makeText(getContext(), "Token de autenticação ausente", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            String[] dateParts = birthdate.split("/");
-            String day = dateParts[0].length() == 1 ? "0" + dateParts[0] : dateParts[0];
-            String month = dateParts[1].length() == 1 ? "0" + dateParts[1] : dateParts[1];
-            String year = dateParts[2];
-            String formattedDate = year + "-" + month + "-" + day;
+        String name = nameInput.getText().toString();
+        String birthdate = birthdateInput.getText().toString();
+        try {
+            CadastroValidator.validarNome(name);
+            CadastroValidator.validarData(birthdate);
+        } catch (IllegalArgumentException e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String formattedDate = formatDate(birthdate);
+
+        if (formattedDate != null) {
             Log.d("QRCode", "Formatted Date: " + formattedDate);
 
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
@@ -111,7 +103,20 @@ public class NovoAniversarianteFragment extends Fragment {
                 }
             });
         } else {
-            Toast.makeText(getContext(), "Token de autenticação ausente", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Data de nascimento inválida", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String formatDate(String birthdate) {
+        try {
+            String[] dateParts = birthdate.split("/");
+            String day = dateParts[0].length() == 1 ? "0" + dateParts[0] : dateParts[0];
+            String month = dateParts[1].length() == 1 ? "0" + dateParts[1] : dateParts[1];
+            String year = dateParts[2];
+            return year + "-" + month + "-" + day;
+        } catch (Exception e) {
+            Log.e("NovoAniversariante", "Erro ao formatar a data", e);
+            return null;
         }
     }
 }
