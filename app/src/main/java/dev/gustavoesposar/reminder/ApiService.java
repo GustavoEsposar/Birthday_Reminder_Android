@@ -21,4 +21,7 @@ public interface ApiService {
 
     @POST("/addBirthdateMobile")
     Call<Void> addAniversariante(@Header("Authorization") String token, @Body Map<String, String> body);
+
+    @POST("/registerMobile")
+    Call<Void> cadastrarUsuario(@Body RegisterRequest cadastroRequest);
 }

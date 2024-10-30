@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#2292ca"
-    tools:context=".CadastroActivity" >
+    tools:context=".CadastroActivity">
 
     <ImageView
         android:id="@+id/imageView"
@@ -44,11 +44,10 @@
         app:layout_constraintVertical_bias="0.0"
         app:lineHeight="100px" />
 
-    <!-- Início do formulário de registro -->
     <LinearLayout
         android:id="@+id/form_container"
         android:layout_width="350dp"
-        android:layout_height="wrap_content"
+        android:layout_height="450dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="0dp"
         android:elevation="10dp"
@@ -62,50 +61,67 @@
         app:layout_constraintTop_toBottomOf="@+id/app_name"
         app:layout_constraintVertical_bias="0.342">
 
-        <!-- Campo para Nome -->
         <EditText
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
-            android:hint="Digite seu nome"
+            android:background="@drawable/cadastro_edit_text_background"
+            android:backgroundTint="@color/black"
+            android:hint="Digite seu nome completo"
             android:inputType="textPersonName"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="@color/white" />
 
-        <!-- Campo para Email -->
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="#FFFFFF"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/cadastro_edit_text_background"
+            android:backgroundTint="@color/black"
             android:hint="Digite seu email"
             android:importantForAccessibility="yes"
             android:inputType="textEmailAddress"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="@color/white" />
 
-        <!-- Campo para Senha -->
         <EditText
             android:id="@+id/passwordOne"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:backgroundTint="#FFFFFF"
+            android:background="@drawable/cadastro_edit_text_background"
+            android:backgroundTint="@color/black"
             android:hint="Digite sua senha"
             android:importantForAccessibility="yes"
             android:inputType="textPassword"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="@color/white" />
 
-        <!-- Campo para Confirmar Senha -->
         <EditText
             android:id="@+id/passwordTwo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:backgroundTint="#FFFFFF"
+            android:background="@drawable/cadastro_edit_text_background"
+            android:backgroundTint="@color/black"
             android:hint="Redigite sua senha"
             android:importantForAccessibility="yes"
             android:inputType="textPassword"
-            android:padding="10dp" />
+            android:padding="10dp"
+            android:textColor="@color/white" />
+
+        <EditText
+            android:id="@+id/birth"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/cadastro_edit_text_background"
+            android:hint="Sua data de nascimento"
+            android:inputType="date"
+            android:maxLength="10"
+            android:padding="10dp"
+            android:textColor="@color/white" />
 
         <!-- Botão de Cadastrar -->
         <Button
@@ -128,13 +144,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:onClick="loginActivity"
             android:padding="10dp"
             android:shadowColor="#000000"
             android:shadowDy="10"
             android:shadowRadius="10"
             android:text="Já tem uma conta? Faça login!"
-            android:textColor="#FFFFFF"
-            android:onClick="loginActivity"/>
+            android:textColor="#FFFFFF" />
     </LinearLayout>
-    <!-- Fim do formulário de registro -->
 </androidx.constraintlayout.widget.ConstraintLayout>

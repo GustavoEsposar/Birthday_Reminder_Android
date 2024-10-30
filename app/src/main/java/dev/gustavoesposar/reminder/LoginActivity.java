@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     QrcodeFragment.saveQrCodeImageLocally(LoginActivity.this);
 
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 } else {
                     Toast.makeText(LoginActivity.this, "Senha ou email incorretos", Toast.LENGTH_SHORT).show();
