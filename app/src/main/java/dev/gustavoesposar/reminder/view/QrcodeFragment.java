@@ -63,11 +63,16 @@ public class QrcodeFragment extends Fragment {
         initializeViews(view);
         initializeServices();
         setupCameraPermissionLauncher();
-        loadQrCodeImage();
 
         openCameraButton.setOnClickListener(v -> handleCameraButtonClick());
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        loadQrCodeImage();
     }
 
     private void initializeViews(View view) {

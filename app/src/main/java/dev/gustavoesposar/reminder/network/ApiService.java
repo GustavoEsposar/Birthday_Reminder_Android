@@ -28,4 +28,7 @@ public interface ApiService {
 
     @POST("/registerMobile")
     Call<Void> cadastrarUsuario(@Body RegisterRequest cadastroRequest);
+
+    @POST("/validateToken")
+    Call<Void> validateToken(@Header("Authorization") String token);
 }

@@ -3,14 +3,23 @@ package dev.gustavoesposar.reminder.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import dev.gustavoesposar.reminder.R;
+import dev.gustavoesposar.reminder.network.ApiClient;
+import dev.gustavoesposar.reminder.network.ApiService;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -36,7 +45,25 @@ public class MainActivity extends AppCompatActivity {
 
         if (token == null) {
             redirectToLogin();
+            return;
         }
+
+        ApiService apiService = ApiClient.getClient().create(ApiService.class);
+        Call<Void> call = apiService.validateToken("Bearer " + token);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, retrofit2.Response<Void> response) {
+                if (!response.isSuccessful()) {
+                    redirectToLogin();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Falha na conexão com o servidor", Toast.LENGTH_SHORT).show();
+                redirectToLogin();
+            }
+        });
     }
 
     private void redirectToLogin() {
