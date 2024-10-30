@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.model;
 
 public class RegisterRequest {
     private String name;

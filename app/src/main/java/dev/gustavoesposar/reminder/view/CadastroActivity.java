@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.view;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,10 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import dev.gustavoesposar.reminder.R;
+import dev.gustavoesposar.reminder.model.RegisterRequest;
+import dev.gustavoesposar.reminder.network.ApiClient;
+import dev.gustavoesposar.reminder.network.ApiService;
 import dev.gustavoesposar.reminder.utils.DateTextWatcher;
 import dev.gustavoesposar.reminder.utils.CadastroValidator;
 import retrofit2.Call;

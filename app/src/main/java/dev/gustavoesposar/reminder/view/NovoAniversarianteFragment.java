@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.view;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,6 +18,9 @@ import androidx.fragment.app.Fragment;
 import java.util.HashMap;
 import java.util.Map;
 
+import dev.gustavoesposar.reminder.R;
+import dev.gustavoesposar.reminder.network.ApiClient;
+import dev.gustavoesposar.reminder.network.ApiService;
 import dev.gustavoesposar.reminder.utils.CadastroValidator;
 import dev.gustavoesposar.reminder.utils.DateTextWatcher;
 import retrofit2.Call;

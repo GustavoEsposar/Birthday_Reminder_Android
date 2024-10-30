@@ -39,4 +39,16 @@ public class CadastroValidator {
             throw new IllegalArgumentException("A data de nascimento não pode estar vazia.");
         }
     }
+
+    /**
+     * Formata a data de nascimento para o formato "yyyy-MM-dd"
+     * @param birthdate : "dd/MM/yyyy"
+     * @return
+     */
+    public static String formatBirthdate(String birthdate) {
+        String year = birthdate.substring(0, 4);
+        String month = birthdate.substring(5, 7);
+        String day = birthdate.substring(8, 10);
+        return year + "-" + month + "-" + day;
+    }
 }

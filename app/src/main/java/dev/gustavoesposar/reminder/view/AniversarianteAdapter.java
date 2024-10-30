@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
+
+import dev.gustavoesposar.reminder.R;
+import dev.gustavoesposar.reminder.model.Aniversariante;
 
 public class AniversarianteAdapter extends RecyclerView.Adapter<AniversarianteAdapter.AniversarianteViewHolder> {
 

@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import dev.gustavoesposar.reminder.R;
 
 public class MainActivity extends AppCompatActivity {
 

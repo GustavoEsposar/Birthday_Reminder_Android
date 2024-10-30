@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.utils;
 
 import com.journeyapps.barcodescanner.CaptureActivity;
 

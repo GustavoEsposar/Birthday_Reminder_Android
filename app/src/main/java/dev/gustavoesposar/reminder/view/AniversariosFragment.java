@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.view;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -23,6 +23,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dev.gustavoesposar.reminder.model.Aniversariante;
+import dev.gustavoesposar.reminder.database.AniversarianteDao;
+import dev.gustavoesposar.reminder.R;
+import dev.gustavoesposar.reminder.database.AppDatabase;
+import dev.gustavoesposar.reminder.network.ApiClient;
+import dev.gustavoesposar.reminder.network.ApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

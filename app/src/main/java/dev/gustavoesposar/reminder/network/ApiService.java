@@ -1,8 +1,12 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.network;
 
 import java.util.List;
 import java.util.Map;
 
+import dev.gustavoesposar.reminder.model.Aniversariante;
+import dev.gustavoesposar.reminder.model.LoginRequest;
+import dev.gustavoesposar.reminder.model.LoginResponse;
+import dev.gustavoesposar.reminder.model.RegisterRequest;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;

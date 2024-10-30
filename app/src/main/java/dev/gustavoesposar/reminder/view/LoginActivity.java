@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,6 +14,11 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import dev.gustavoesposar.reminder.model.LoginRequest;
+import dev.gustavoesposar.reminder.model.LoginResponse;
+import dev.gustavoesposar.reminder.R;
+import dev.gustavoesposar.reminder.network.ApiClient;
+import dev.gustavoesposar.reminder.network.ApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

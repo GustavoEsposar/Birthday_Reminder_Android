@@ -1,4 +1,4 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.model;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;

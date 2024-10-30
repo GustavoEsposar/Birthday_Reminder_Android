@@ -1,10 +1,12 @@
-package dev.gustavoesposar.reminder;
+package dev.gustavoesposar.reminder.database;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
+
+import dev.gustavoesposar.reminder.model.Aniversariante;
 
 @Dao
 public interface AniversarianteDao {
