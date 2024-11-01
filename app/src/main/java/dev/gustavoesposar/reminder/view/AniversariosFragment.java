@@ -5,6 +5,7 @@ import static android.content.Context.MODE_PRIVATE;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,32 +43,37 @@ public class AniversariosFragment extends Fragment {
     private AniversarianteAdapter aniversarianteAdapter;
     private List<Aniversariante> aniversariantes = new ArrayList<>();
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        AppDatabase db = Room.databaseBuilder(requireContext(),
+                AppDatabase.class, "AppDatabase").fallbackToDestructiveMigration().build();
+        aniversarianteDao = db.aniversarianteDao();
+
+        apiService = ApiClient.getClient().create(ApiService.class);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_aniversarios, container, false);
 
-        // Inicializar Room Database e DAO
-        AppDatabase db = Room.databaseBuilder(requireContext(),
-                AppDatabase.class, "AppDatabase").fallbackToDestructiveMigration().build();
-        aniversarianteDao = db.aniversarianteDao();
-
-        // Inicializar ApiService
-        apiService = ApiClient.getClient().create(ApiService.class);
-
-        // Configurar o SwipeRefreshLayout
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this::carregarAniversariantesDoServidor);
 
-        // Inicializar RecyclerView
         recyclerView = view.findViewById(R.id.recyclerViewAniversariantes);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         aniversarianteAdapter = new AniversarianteAdapter(aniversariantes, this::deletarAniversariante);
         recyclerView.setAdapter(aniversarianteAdapter);
 
-        carregarAniversariantesDoServidor();
-
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        carregarAniversariantesDoServidor();
     }
 
     private void carregarAniversariantesLocalmente() {
@@ -80,7 +86,9 @@ public class AniversariosFragment extends Fragment {
     }
 
     private void carregarAniversariantesDoServidor() {
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
+        if (!isAdded()) return;
+
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences("MyAppPrefs", MODE_PRIVATE);
         String token = sharedPreferences.getString("JWT_TOKEN", null);
 
         if (token != null) {
@@ -89,26 +97,35 @@ public class AniversariosFragment extends Fragment {
             call.enqueue(new Callback<List<Aniversariante>>() {
                 @Override
                 public void onResponse(Call<List<Aniversariante>> call, Response<List<Aniversariante>> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        // Atualizar o banco de dados local com os novos dados
+                    if (isAdded() && response.isSuccessful() && response.body() != null) {
                         new Thread(() -> {
                             aniversarianteDao.deleteAll();
                             aniversarianteDao.insertAll(response.body());
-                            requireActivity().runOnUiThread(() -> carregarAniversariantesLocalmente());
+
+                            if (isAdded()) {
+                                requireActivity().runOnUiThread(() -> carregarAniversariantesLocalmente());
+                            }
                         }).start();
                     }
-                    swipeRefreshLayout.setRefreshing(false);
+
+                    if (isAdded()) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
 
                 @Override
                 public void onFailure(Call<List<Aniversariante>> call, Throwable t) {
-                    Toast.makeText(getContext(), "Erro ao carregar dados", Toast.LENGTH_SHORT).show();
-                    swipeRefreshLayout.setRefreshing(false);
+                    if (isAdded()) {
+                        Toast.makeText(getContext(), "Erro ao carregar dados", Toast.LENGTH_SHORT).show();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
                 }
             });
         } else {
-            Toast.makeText(getContext(), "Token não encontrado. Faça login novamente.", Toast.LENGTH_SHORT).show();
-            swipeRefreshLayout.setRefreshing(false);
+            if (isAdded()) {
+                Toast.makeText(getContext(), "Token não encontrado. Faça login novamente.", Toast.LENGTH_SHORT).show();
+                swipeRefreshLayout.setRefreshing(false);
+            }
         }
     }
 
@@ -120,9 +137,8 @@ public class AniversariosFragment extends Fragment {
         if (token != null) {
             ApiService apiService = ApiClient.getClient().create(ApiService.class);
 
-            // Cria o corpo da requisição como JSON
             Map<String, String> body = new HashMap<>();
-            body.put("_id", String.valueOf(aniversariante.get_id()));  // Converte ID para String se necessário
+            body.put("_id", String.valueOf(aniversariante.get_id()));
 
             Call<Void> call = apiService.deleteAniversariante("Bearer " + token, body);
 

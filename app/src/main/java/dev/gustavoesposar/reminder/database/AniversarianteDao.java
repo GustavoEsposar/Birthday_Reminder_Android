@@ -1,6 +1,7 @@
 package dev.gustavoesposar.reminder.database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -18,5 +19,8 @@ public interface AniversarianteDao {
 
     @Query("DELETE FROM aniversariantes")
     void deleteAll();
+
+    @Delete
+    void delete(Aniversariante aniversariante);
 }
 
