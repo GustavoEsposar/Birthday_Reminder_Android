@@ -2,6 +2,7 @@ package dev.gustavoesposar.reminder.view;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.app.AlertDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -147,6 +148,19 @@ public class AniversariosFragment extends Fragment {
     }
 
     private void deletarAniversariante(Aniversariante aniversariante) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Confirmação de Exclusão")
+                .setMessage("Você realmente deseja excluir este aniversariante?")
+                .setPositiveButton("Confirmar", (dialog, which) -> {
+                    realizarExclusao(aniversariante);
+                })
+                .setNegativeButton("Cancelar", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+    private void realizarExclusao(Aniversariante aniversariante) {
         String token = getTokenFromPreferences();
         if (token == null) {
             Toast.makeText(getContext(), "Token de autenticação ausente", Toast.LENGTH_SHORT).show();

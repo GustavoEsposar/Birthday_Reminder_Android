@@ -94,6 +94,7 @@ public class NovoAniversarianteFragment extends Fragment {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.isSuccessful()) {
+                        resetForm();
                         Toast.makeText(getContext(), name.split(" ")[0] + " foi adicionado!", Toast.LENGTH_SHORT).show();
                     } else {
                         Toast.makeText(getContext(), "Erro ao adicionar no servidor", Toast.LENGTH_SHORT).show();
@@ -108,6 +109,11 @@ public class NovoAniversarianteFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "Data de nascimento inválida", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void resetForm() {
+        nameInput.setText("");
+        birthdateInput.setText("");
     }
 
     private String formatDate(String birthdate) {
