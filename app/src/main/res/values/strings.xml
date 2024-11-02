@@ -3,5 +3,6 @@
     <string name="title_fragment_aniversarios">Aniversários</string>
     <string name="title_fragment_novoaniversariante">Nova Data</string>
     <string name="title_fragment_qrcode">QR Code</string>
+    <string name="title_fragment_ajustes">Ajustes</string>
     <string name="delete">Deletar</string>
 </resources>

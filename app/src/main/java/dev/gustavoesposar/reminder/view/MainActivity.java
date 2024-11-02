@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentMap.put(R.id.nav_aniversarios, new AniversariosFragment());
         fragmentMap.put(R.id.nav_novoaniversario, new NovoAniversarianteFragment());
         fragmentMap.put(R.id.nav_qrcode, new QrcodeFragment());
+        fragmentMap.put(R.id.nav_ajustes, new AjustesFragment());
     }
 
     private void initializeBottomNavigation() {

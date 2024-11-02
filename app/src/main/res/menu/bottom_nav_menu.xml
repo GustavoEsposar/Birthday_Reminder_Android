@@ -12,4 +12,9 @@
         android:id="@+id/nav_qrcode"
         android:icon="@drawable/baseline_qr_code_2_24"
         android:title="@string/title_fragment_qrcode" />
+
+    <item
+        android:id="@+id/nav_ajustes"
+        android:icon="@drawable/settings"
+        android:title="@string/title_fragment_ajustes" />
 </menu>
