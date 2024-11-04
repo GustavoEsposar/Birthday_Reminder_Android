@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -22,6 +23,9 @@ import androidx.fragment.app.Fragment;
 
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -34,17 +38,11 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.Manifest;
-import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import dev.gustavoesposar.reminder.utils.CadastroValidator;
-import dev.gustavoesposar.reminder.utils.CaptureAct;
 import dev.gustavoesposar.reminder.R;
 import dev.gustavoesposar.reminder.network.ApiClient;
 import dev.gustavoesposar.reminder.network.ApiService;
+import dev.gustavoesposar.reminder.utils.CadastroValidator;
+import dev.gustavoesposar.reminder.utils.CaptureAct;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,6 +50,7 @@ import retrofit2.Response;
 public class QrcodeFragment extends Fragment {
 
     private ActivityResultLauncher<String> requestCameraPermissionLauncher;
+    private ActivityResultLauncher<ScanOptions> cameraLauncher;
     private ApiService apiService;
     private SharedPreferences sharedPreferences;
     private ImageButton openCameraButton;
@@ -63,6 +62,14 @@ public class QrcodeFragment extends Fragment {
         initializeViews(view);
         initializeServices();
         setupCameraPermissionLauncher();
+
+        // Registrar o cameraLauncher aqui, para que ele esteja disponível antes de ser lançado.
+        cameraLauncher = registerForActivityResult(new ScanContract(), result -> {
+            if (result.getContents() != null) {
+                Log.d("QRCode", "Scanned: " + result.getContents());
+                handleQRCodeData(result.getContents());
+            }
+        });
 
         openCameraButton.setOnClickListener(v -> handleCameraButtonClick());
 
@@ -108,10 +115,10 @@ public class QrcodeFragment extends Fragment {
     }
 
     private void handleCameraButtonClick() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             scanCode();
         } else {
-            requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+            requestCameraPermissionLauncher.launch(android.Manifest.permission.CAMERA);
         }
     }
 
@@ -123,13 +130,6 @@ public class QrcodeFragment extends Fragment {
                 .setCaptureActivity(CaptureAct.class);
         cameraLauncher.launch(options);
     }
-
-    private final ActivityResultLauncher<ScanOptions> cameraLauncher = registerForActivityResult(new ScanContract(), result -> {
-        if (result.getContents() != null) {
-            Log.d("QRCode", "Scanned: " + result.getContents());
-            handleQRCodeData(result.getContents());
-        }
-    });
 
     private void handleQRCodeData(String qrData) {
         String token = sharedPreferences.getString("JWT_TOKEN", null);

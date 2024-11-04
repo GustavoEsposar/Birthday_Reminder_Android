@@ -120,9 +120,8 @@ public class AniversariosFragment extends Fragment {
                 hideLoading();
                 if (response.isSuccessful() && response.body() != null) {
                     updateLocalDatabase(response.body());
-                } else {
-                    swipeRefreshLayout.setRefreshing(false);
                 }
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
